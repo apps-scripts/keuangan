@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>BKU Digital Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
+<!-- Tom Select CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
+  
+  <style>
+    :root { --primary-color: #2563eb; --secondary-color: #64748b; --accent-color: #f59e0b; }
+    body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #1e293b; }
+    
+    /* Navbar & Tabs */
+    /* Container Navigasi Utama */
+.nav-tabs {
+  border-bottom: none !important;
+  display: flex;
+  gap: 10px;
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: inline-flex; /* Membuat tab tidak melebar penuh */
+}
+
+/* Gaya Dasar Tombol Tab */
+.nav-tabs .nav-link {
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 10px 24px !important;
+  font-weight: 600 !important;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b !important; /* Warna Slate */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  background: transparent;
+}
+
+/* Efek Hover */
+.nav-tabs .nav-link:hover:not(.active):not(.disabled-tab) {
+  background-color: #f1f5f9 !important;
+  color: #2563eb !important;
+  transform: translateY(-1px);
+}
+
+/* Gaya Tab AKTIF (Memukau dengan Gradasi) */
+.nav-tabs .nav-link.active {
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3) !important;
+  transform: scale(1.05);
+}
+
+/* Gaya Tab DISABLED (Saat Mode Edit) */
+.nav-link.disabled-tab {
+  opacity: 0.3 !important;
+  filter: grayscale(1);
+  cursor: not-allowed !important;
+}
+
+/* Animasi sederhana saat pindah tab */
+.tab-pane {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+    
+    /* Cards */
+    .card-lux { border: none; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); background: #fff; margin-bottom: 20px; transition: transform 0.2s; }
+    .card-lux:hover { transform: translateY(-2px); }
+    
+    /* Stats Info */
+    .stat-card { padding: 20px; border-radius: 16px; color: white; display: flex; align-items: center; justify-content: space-between; }
+    .bg-income { background: linear-gradient(135deg, #10b981, #059669); }
+    .bg-expense { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .bg-balance { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    
+    /* Table Styling */
+    .table-modern thead th { background-color: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; padding: 15px; }
+    .table-modern tbody td { padding: 12px 15px; vertical-align: middle; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+    
+    /* Pagination */
+    .pagination .page-link { border: none; margin: 0 3px; border-radius: 8px; color: var(--secondary-color); }
+    .pagination .page-item.active .page-link { background-color: var(--primary-color); }
+
+    /* Forms */
+    .form-label { font-weight: 600; font-size: 12px; color: #475569; }
+    .form-control, .form-select { border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px; font-size: 14px; }
+    .form-control:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: var(--primary-color); }
+
+    #loader { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
+
+/* Container Pencarian Pill Shape */
+#rowsPerPageSelect, .input-group-pill {
+  height: 38px; /* Tinggi standar yang ideal */
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+/* Spesifik untuk Dropdown */
+#rowsPerPageSelect {
+  border-radius: 50px !important; /* Membuat pill sempurna */
+  padding: 0 10px 0 15px !important;
+  font-size: 13px;
+  cursor: pointer;
+  width: 80px !important; /* Lebar dropdown */
+}
+
+.input-group-pill {
+  display: flex;
+  align-items: center;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  padding: 0 15px;
+  height: 38px;
+  width: 300px;
+  transition: all 0.3s ease;
+}
+
+.input-group-pill:focus-within {
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.icon-left {
+  color: #94a3b8;
+  margin-right: 10px;
+}
+
+#rowsPerPageSelect:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.search-input {
+  border: none !important;         /* Menghapus border */
+  outline: none !important;        /* Menghapus kotak biru/hitam saat diklik (focus) */
+  background: transparent !important; /* Menghapus warna latar belakang */
+  box-shadow: none !important;     /* Menghapus bayangan bawaan */
+  height: 100%;
+  flex: 1;
+  font-size: 13px;
+  padding: 0 5px !important;       /* Padding dalam agar teks tidak mepet ikon */
+}
+
+.btn-clear {
+  border: none;
+  background: none;
+  color: #cbd5e1;
+  padding: 0;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.btn-clear:hover {
+  color: #64748b;
+}
+
+/* Pagination Styling */
+.pagination .page-link {
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  border-radius: 8px !important;
+  padding: 6px 12px;
+  font-weight: 600;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+  background: #f8fafc;
+  opacity: 0.5;
+}
+
+/* Mencegah teks turun ke bawah (wrap) */
+.no-wrap {
+  white-space: nowrap !important;
+}
+
+/* Opsional: Berikan sedikit ruang pada kolom agar tidak terlalu mepet */
+.table-modern td {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+/* Membuat teks rata kiri-kanan */
+.text-justify {
+  text-align: justify !important;
+  text-justify: inter-word; /* Mengatur spasi antar kata agar lebih rapi */
+}
+
+/* Pastikan kolom uraian memiliki ruang yang cukup */
+.col-uraian {
+  min-width: 250px; /* Atur lebar minimal agar efek justify terlihat bagus */
+  line-height: 1.5; /* Memberikan spasi antar baris agar lebih enak dibaca */
+}
+
+/* Mengatur perataan baris ke atas (Top Align) */
+.table-modern td, 
+.table-modern th {
+  vertical-align: top !important;
+  padding-top: 12px !important; /* Menjaga jarak atas agar tetap elegan */
+}
+
+/* Memastikan tombol aksi juga rata atas */
+.btn-group {
+  vertical-align: top;
+}
+
+/* Style tambahan untuk kolom NO agar terlihat rapi di atas */
+.col-no {
+  padding-top: 14px !important;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* Mengatur perataan teks TBP di dalam badge */
+.badge.text-start {
+  text-align: left !important;
+  white-space: normal !important; /* Mengizinkan teks turun ke bawah */
+}
+
+/* Memberikan jarak sedikit dari garis tepi kiri tabel */
+.table-modern td:nth-child(4) {
+  padding-left: 10px !important;
+}
+
+/* Container Aksi */
+.action-wrapper {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Base Style Tombol Lux */
+.btn-lux {
+  border: none;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px; /* Sudut membulat modern */
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Tombol Edit - Soft Blue/Indigo */
+.btn-edit-lux {
+  background-color: #e0e7ff; /* Biru sangat muda */
+  color: #4338ca; /* Indigo gelap */
+}
+
+.btn-edit-lux:hover {
+  background-color: #4338ca;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2);
+}
+
+/* Tombol Hapus - Soft Rose/Red */
+.btn-delete-lux {
+  background-color: #fee2e2; /* Merah sangat muda */
+  color: #dc2626; /* Merah tegas */
+}
+
+.btn-delete-lux:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+/* Gaya untuk Tab yang di-disable */
+.nav-link.disabled-tab {
+  pointer-events: none; /* Tidak bisa diklik */
+  opacity: 0.5;        /* Terlihat pudar */
+  cursor: not-allowed;
+}
+
+/* Gaya untuk tombol aksi yang di-disable */
+.btn-disabled-lux {
+  background-color: #f1f5f9 !important; /* Warna abu pudar */
+  color: #cbd5e1 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.btn-disabled-lux:hover {
+  background-color: #f1f5f9 !important;
+  transform: none !important;
+}
+
+/* Kustomisasi Warna Kalender Flatpickr */
+.flatpickr-calendar {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+  border-radius: 15px !important;
+  border: none !important;
+  padding: 5px;
+}
+
+.flatpickr-day.selected, 
+.flatpickr-day.startRange, 
+.flatpickr-day.endRange, 
+.flatpickr-day.selected.prevMonthDay, 
+.flatpickr-day.selected.nextMonthDay, 
+.flatpickr-day.startRange.prevMonthDay, 
+.flatpickr-day.startRange.nextMonthDay, 
+.flatpickr-day.endRange.prevMonthDay, 
+.flatpickr-day.endRange.nextMonthDay {
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3) !important;
+}
+
+.flatpickr-months .flatpickr-month {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  font-weight: 700 !important;
+}
+
+/* 1. Mewarnai kotak TANGGAL HARI INI secara full */
+.flatpickr-day.today {
+  background: #ef4444 !important; /* Warna merah solid seperti gambar */
+  color: white !important;
+  border-color: #ef4444 !important;
+  border-radius: 8px !important; /* Membuat sudut kotak sedikit membulat agar mewah */
+  font-weight: bold;
+}
+
+/* Memastikan hover pada hari ini tetap berwarna bagus */
+.flatpickr-day.today:hover {
+  background: #dc2626 !important;
+  color: white !important;
+}
+
+/* 2. Mewarnai TEXT HARI SABTU menjadi merah */
+/* Sabtu adalah elemen ke-6 (7n-1) dalam grid flatpickr */
+.flatpickr-day:nth-child(7n-1), 
+.flatpickr-weekday:nth-child(7n-1) {
+  color: #ef4444 !important;
+}
+
+/* 3. Mewarnai TEXT HARI MINGGU menjadi merah */
+/* Minggu adalah elemen ke-7 (7n) dalam grid flatpickr */
+.flatpickr-day:nth-child(7n), 
+.flatpickr-weekday:nth-child(7n) {
+  color: #ef4444 !important;
+}
+
+/* Opsional: Jika tanggal merah adalah hari yang dipilih (Selected), 
+   tetap gunakan warna tema (Indigo/Blue) agar user tidak bingung */
+.flatpickr-day.selected {
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Styling Custom Dropdown Tom Select */
+.ts-control {
+  border-radius: 12px !important; /* Sudut membulat mewah */
+  padding: 10px 15px !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #f8fafc !important;
+  font-size: 13px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+
+.ts-wrapper.focus .ts-control {
+  border-color: #2563eb !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+}
+
+.ts-dropdown {
+  border-radius: 12px !important;
+  margin-top: 5px !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+  border: 1px solid #f1f5f9 !important;
+  padding: 5px !important;
+}
+
+.ts-dropdown .option {
+  border-radius: 8px;
+  padding: 8px 12px !important;
+  margin: 2px 0;
+}
+
+.ts-dropdown .active {
+  background-color: #f1f5f9 !important;
+  color: #2563eb !important;
+}
+
+/* Ikon di dalam dropdown */
+.select-icon {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+  color: #64748b;
+}
+  </style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="spinner-grow text-primary" role="status"></div>
+  <p class="mt-2 fw-bold">Memproses Data...</p>
+</div>
+
+<div class="container-fluid py-4 px-lg-5">
+  <div class="d-flex justify-content-center mb-4"> <!-- Memposisikan tab di tengah agar lebih mewah -->
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#tab-input" type="button">
+        <i class="fa-solid fa-pen-to-square me-2"></i>Input
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="bku-tab" data-bs-toggle="tab" data-bs-target="#tab-bku" type="button" onclick="muatData()">
+        <i class="fa-solid fa-table-list me-2"></i>Tabel Transaksi
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="set-tab" data-bs-toggle="tab" data-bs-target="#tab-set" type="button" onclick="loadSettingsUI()">
+        <i class="fa-solid fa-gears me-2"></i>Pengaturan
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="report-tab" data-bs-toggle="tab" data-bs-target="#tab-report" type="button">
+        <i class="fa-solid fa-file-pdf me-2"></i>Laporan
+      </button>
+    </li>
+  </ul>
+</div>
+
+  <!-- Dashboard Summary -->
+  <div class="row mb-4 g-3">
+    <div class="col-md-4"><div class="stat-card bg-income"><div><small>Penerimaan</small><h3 class="fw-bold mb-0" id="stat-terima">Rp 0</h3></div><i class="fa-solid fa-arrow-down-long fa-2x opacity-50"></i></div></div>
+    <div class="col-md-4"><div class="stat-card bg-expense"><div><small>Pengeluaran</small><h3 class="fw-bold mb-0" id="stat-keluar">Rp 0</h3></div><i class="fa-solid fa-arrow-up-long fa-2x opacity-50"></i></div></div>
+    <div class="col-md-4"><div class="stat-card bg-balance"><div><small>Saldo Akhir</small><h3 class="fw-bold mb-0" id="stat-saldo">Rp 0</h3></div><i class="fa-solid fa-scale-balanced fa-2x opacity-50"></i></div></div>
+  </div>
+
+  <div class="tab-content">
+    <!-- TAB 1: INPUT -->
+<div class="tab-pane fade show active" id="tab-input" role="tabpanel">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card card-lux p-4">
+        <h5 class="fw-bold mb-4 border-bottom pb-2">Form Transaksi Baru</h5>
+        <form id="formTransaksi">
+          <input type="hidden" id="edit-id">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Tanggal</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-calendar-days text-primary"></i></span>
+                <input type="text" class="form-control border-start-0" id="tanggal" placeholder="Pilih Tanggal..." required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nomor TBP</label>
+              <input type="text" class="form-control" id="nomorTBP" placeholder="Contoh: TBP/001">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Jenis</label>
+              <select class="form-select" id="jenis" onchange="updateSubJenis()" required>
+                <option value="">-- Pilih --</option>
+                <option value="Pelimpahan">Pelimpahan</option>
+                <option value="Pengeluaran">Pengeluaran</option>
+                <option value="Pengembalian">Pengembalian</option>
+                <option value="Pajak">Pajak</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sub Jenis</label>
+              <select class="form-select" id="subJenis" required><option value="">-- Pilih --</option></select>
+            </div>
+            
+            <div id="section-anggaran" class="col-12" style="display:none;">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Kegiatan</label>
+                  <select class="form-select" id="inp-kegiatan" onchange="filterSubKegiatan()"></select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Sub Kegiatan</label>
+                  <select class="form-select" id="inp-subkegiatan" onchange="filterKoderingBelanja()"></select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Kode Belanja</label>
+                  <select class="form-select" id="inp-koderingbelanja"></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Uraian Transaksi</label>
+              <textarea class="form-control" id="uraian" rows="3" required placeholder="Jelaskan detail transaksi..."></textarea>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Jumlah Uang (Rp)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">Rp</span>
+                <input type="text" class="form-control border-start-0" id="jumlah" oninput="formatInputRupiah(this)" placeholder="0" required>
+              </div>
+            </div>
+
+            <!-- BAGIAN TOMBOL UPDATE -->
+            <div class="col-12 mt-4">
+              <div class="d-flex gap-2">
+                <button type="button" id="btn-save" class="btn btn-primary w-100 py-2 fw-bold" onclick="handleSimpan()">
+                  <i class="fa-solid fa-save me-2"></i>Simpan Transaksi
+                </button>
+                <button type="button" id="btn-cancel" class="btn btn-outline-secondary py-2 fw-bold d-none" onclick="handleBatalEdit()" style="width: 150px;">
+                  <i class="fa-solid fa-xmark me-2"></i>Batal
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- TAB 2: TABEL BKU -->
+<div class="tab-pane fade" id="tab-bku" role="tabpanel">
+  <div class="card card-lux">
+    <!-- Header Tabel: Judul & Kontrol -->
+    <div class="card-header bg-transparent border-0 p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+  <h5 class="fw-bold mb-0 text-primary">
+    <i class="fa-solid fa-list-check me-2"></i>Riwayat Transaksi
+  </h5>
+
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <!-- Filter Per Halaman -->
+    <div class="d-flex align-items-center gap-2">
+      <span class="small text-secondary fw-semibold">Baris:</span>
+      <select id="rowsPerPageSelect" class="form-select form-select-sm rounded-pill" style="width: 70px;" onchange="changeRowsPerPage(this.value)">
+        <option value="5" selected>5</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+      </select>
+    </div>
+
+    <!-- BARU: Filter Bulan (Mewah) -->
+    <div class="d-flex align-items-center gap-2">
+      <span class="small text-secondary fw-semibold">Bulan:</span>
+      <select id="filterBulan" class="form-select-sm" onchange="filterData()" style="width: 150px;">
+        <option value="">Semua Bulan</option>
+        <option value="1">Januari</option>
+        <option value="2">Februari</option>
+        <option value="3">Maret</option>
+        <option value="4">April</option>
+        <option value="5">Mei</option>
+        <option value="6">Juni</option>
+        <option value="7">Juli</option>
+        <option value="8">Agustus</option>
+        <option value="9">September</option>
+        <option value="10">Oktober</option>
+        <option value="11">November</option>
+        <option value="12">Desember</option>
+      </select>
+    </div>
+
+    <!-- Kolom Pencarian -->
+    <div class="search-container">
+      <div class="input-group-pill">
+        <i class="fa-solid fa-magnifying-glass icon-left"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Cari..." onkeyup="filterData()">
+        <button class="btn-clear d-none" id="clearBtn" onclick="clearSearch()">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Area Tabel -->
+    <div class="table-responsive">
+      <table class="table table-modern mb-0">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 50px;">No</th>
+            <th>No BKU</th>
+            <th>Tanggal</th>
+            <th class="text-center">TBP</th>
+            <th style="width: 25%;">Uraian</th>
+            <th class="text-center">Kode Belanja</th>
+            <th class="text-center">Penerimaan</th>
+            <th class="text-center">Pengeluaran</th>
+            <th class="text-center">Saldo</th>
+            <th class="text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelBKU">
+          <!-- Data akan diisi oleh JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer Tabel: Info & Navigasi -->
+    <div class="card-footer bg-transparent border-0 p-4 d-flex justify-content-between align-items-center">
+      <div id="pageInfo" class="small text-secondary fw-semibold">
+        Menampilkan 0 - 0 dari 0 data
+      </div>
+      <nav>
+        <ul class="pagination pagination-sm mb-0 gap-1" id="pagination">
+          <!-- Tombol Prev, Numbers, Next akan diisi oleh JavaScript -->
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    <!-- TAB 3: PENGATURAN -->
+<div class="tab-pane fade" id="tab-set" role="tabpanel">
+  <div class="row g-4">
+    <!-- Form Tambah/Edit Referensi -->
+    <div class="col-md-4">
+      <div class="card card-lux p-4 shadow-sm">
+        <h6 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-folder-plus me-2"></i>Tambah Referensi</h6>
+        
+        <div class="mb-3">
+          <label class="form-label fw-bold">Tipe Referensi</label>
+          <select class="form-select" id="set-tipe" onchange="toggleParentSetting()">
+            <option value="Kegiatan">Kegiatan</option>
+            <option value="Sub Kegiatan">Sub Kegiatan</option>
+            <option value="Kodering Belanja">Kodering Belanja</option>
+          </select>
+        </div>
+
+        <!-- Container Parent (Muncul jika pilih Sub atau Kodering) -->
+        <div id="parent-container" class="mb-3" style="display:none">
+          <label class="form-label text-accent fw-bold" id="parent-label">Pilih Induk (Parent)</label>
+          <select class="form-select" id="set-parent">
+            <!-- Diisi otomatis lewat JS -->
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Nomor Kodering</label>
+          <input type="text" class="form-control" id="set-kodering" placeholder="Contoh: 5.03.02.1.01.0008">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Nama / Uraian</label>
+          <input type="text" class="form-control" id="set-nama" placeholder="Nama Kegiatan / Belanja">
+        </div>
+
+        <!-- Input Pagu (Hanya muncul untuk Kodering Belanja) -->
+        <div id="pagu-container" class="mb-3" style="display:none">
+          <label class="form-label fw-bold">Pagu Anggaran (Rp)</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">Rp</span>
+            <input type="text" class="form-control" id="set-pagu" oninput="formatInputRupiah(this)" placeholder="0">
+          </div>
+        </div>
+
+        <!-- ID Hidden untuk keperluan edit -->
+        <input type="hidden" id="set-id">
+
+        <!-- Area Tombol -->
+        <div class="col-12 mt-4">
+          <div class="d-flex gap-2">
+            <!-- Tombol Utama -->
+            <button id="btn-save-setting" class="btn btn-success w-100 py-2 fw-bold" onclick="handleSaveSetting()">
+              <i class="fa-solid fa-plus-circle me-2"></i>Tambah Data
+            </button>
+            
+            <!-- Tombol Batal Edit -->
+            <button id="btn-cancel-setting" class="btn btn-outline-secondary py-2 fw-bold d-none" style="width: 150px;" onclick="handleBatalSetting()">
+              Batal
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabel Daftar Referensi -->
+    <div class="col-md-8">
+      <div class="card card-lux overflow-hidden">
+        <div class="card-header bg-transparent p-3 border-bottom">
+          <h6 class="fw-bold mb-0">Daftar Referensi Anggaran</h6>
+        </div>
+        <div class="table-responsive" style="max-height: 500px;">
+          <table class="table table-modern table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Tipe</th>
+                <th>Kode</th>
+                <th>Nama / Uraian</th>
+                <th class="text-end">Pagu Anggaran</th> <!-- Ganti header INDUK menjadi Pagu -->
+                <th class="text-center">Aksi</th> <!-- Tambahkan header AKSI ini -->
+              </tr>
+            </thead>
+            <tbody id="set-list">
+              <!-- Data dimuat lewat JavaScript renderSettingsTable -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: LAPORAN -->
+<div class="tab-pane fade" id="tab-report" role="tabpanel">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card card-lux p-5 text-center shadow">
+        <div class="mb-4">
+          <i class="fa-solid fa-file-invoice-dollar fa-4x text-primary opacity-25"></i>
+        </div>
+        <h4 class="fw-bold">Cetak Buku Kas Umum</h4>
+        <p class="text-secondary">Pilih periode dan tanggal cetak untuk laporan PDF.</p>
+        
+        <div class="row g-3 justify-content-center mt-3 text-start">
+          <div class="col-md-10">
+            
+            <!-- INPUT TANGGAL CETAK MANUAL -->
+            <div class="mb-3">
+              <label class="form-label fw-bold small">Tanggal Cetak Laporan (Manual)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-calendar-day text-primary"></i></span>
+                <input type="text" class="form-control border-start-0" id="reportTanggalCetak" placeholder="Pilih Tanggal Cetak...">
+              </div>
+            </div>
+
+            <!-- PILIH PERIODE BULAN -->
+            <div class="mb-4">
+              <label class="form-label fw-bold small">Pilih Periode Bulan</label>
+              <select id="reportBulan" class="form-select">
+                <!-- Diisi otomatis lewat JavaScript -->
+              </select>
+            </div>
+            
+            <button class="btn btn-primary btn-lg w-100 fw-bold shadow-sm" onclick="downloadPDF()">
+              <i class="fa-solid fa-download me-2"></i>Download Laporan PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let ALL_DATA = [], FILTERED_DATA = [], ALL_SETTINGS = [];
+  let currentPage = 1, rowsPerPage = 5;
+  let fp, instances = {}; 
+  let isProgrammaticUpdate = false;
+  let fpReport;
+
+  const OPTIONS = {
+    'Pelimpahan': ['UP', 'GU', 'TU', 'LS'],
+    'Pengeluaran': ['UP', 'GU', 'TU', 'LS'],
+    'Pengembalian': ['UP', 'GU', 'TU', 'LS'],
+    'Pajak': ['Potongan PPN', 'Potongan PPh 21', 'Potongan PPh 22', 'Potongan PPh 23', 'Penyetoran PPN', 'Penyetoran PPh 21', 'Penyetoran PPh 22', 'Penyetoran PPh 23']
+  };
+
+  window.onload = () => {
+  // 1. Inisialisasi Kalender Flatpickr (Input Utama)
+  fp = flatpickr("#tanggal", { 
+    locale: "id", altInput: true, altFormat: "d F Y", dateFormat: "Y-m-d", animate: true 
+  });
+
+  // 2. Inisialisasi Kalender Flatpickr (Tab Laporan)
+  fpReport = flatpickr("#reportTanggalCetak", { 
+    locale: "id", altInput: true, altFormat: "d F Y", dateFormat: "Y-m-d", 
+    defaultDate: "today" 
+  });
+
+  // 3. Inisialisasi SEMUA Dropdown Tom Select (LuxSelect)
+  // Pastikan ID ini sama persis dengan yang ada di HTML Anda
+  initLuxSelect('jenis', 'fa-solid fa-tags');
+  initLuxSelect('subJenis', 'fa-solid fa-circle-dot');
+  initLuxSelect('inp-kegiatan', 'fa-solid fa-folder');
+  initLuxSelect('inp-subkegiatan', 'fa-solid fa-sitemap');
+  initLuxSelect('inp-koderingbelanja', 'fa-solid fa-receipt');
+  initLuxSelect('filterBulan', 'fa-solid fa-calendar-check');
+  initLuxSelect('set-tipe', 'fa-solid fa-list-ul');
+  initLuxSelect('set-parent', 'fa-solid fa-share-nodes');
+  initLuxSelect('reportBulan', 'fa-solid fa-calendar-days');
+
+  // 4. Pasang Event Listener untuk Reset antar Tab
+  const tabBtnElements = document.querySelectorAll('button[data-bs-toggle="tab"]');
+  tabBtnElements.forEach(btn => {
+    btn.addEventListener('show.bs.tab', () => {
+      // Fungsi reset ini akan dipanggil otomatis saat Anda pindah tab
+      resetApplicationState();
+    });
+  });
+
+  // 5. ISI DATA KE DROPDOWN (Suntik Opsi)
+  isProgrammaticUpdate = true; // Kunci pemicu selama inisialisasi data
+  
+  populateReportMonths(); 
+  populateFilterBulan();  // Mengisi dropdown periode di Tab Laporan
+  
+  // 6. MUAT DATA DARI SPREADSHEET
+  muatData();              // Mengambil riwayat transaksi BKU
+  loadSettingsUI();        // Mengambil data referensi kegiatan di Tab Pengaturan
+
+  setTimeout(() => { isProgrammaticUpdate = false; }, 500); // Lepas kunci
+};
+
+   function toggleLoader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
+
+   function initLuxSelect(id, icon) {
+  if (instances[id]) instances[id].destroy();
+  instances[id] = new TomSelect(`#${id}`, {
+    create: false, sortField: null, placeholder: "-- Pilih --", allowEmptyOption: true,
+    render: {
+      option: (d, e) => `<div><i class="${icon} select-icon"></i>${e(d.text)}</div>`,
+      item: (d, e) => `<div><i class="${icon} select-icon"></i>${e(d.text)}</div>`
+    }
+  });
+
+  instances[id].on('change', () => {
+    // JIKA BUKAN DARI SISTEM (Edit), JALANKAN FILTER OTOMATIS
+    if (!isProgrammaticUpdate) {
+      if (id === 'jenis') updateSubJenis();
+      if (id === 'inp-kegiatan') filterSubKegiatan();
+      if (id === 'inp-subkegiatan') filterKoderingBelanja();
+      if (id === 'filterBulan') filterData();
+      if (id === 'set-tipe') toggleParentSetting();
+    }
+  });
+}
+
+   function updateSubJenis(val = "") {
+  const j = document.getElementById('jenis').value;
+  const tsSub = instances['subJenis'];
+  const ang = document.getElementById('section-anggaran');
+
+  if (tsSub) {
+    // 1. Bersihkan pilihan yang sedang terpilih (Tanpa memicu pemicu/event)
+    tsSub.clear(true); 
+
+    // 2. Hapus total semua daftar pilihan (options) yang ada di memori Tom Select
+    tsSub.clearOptions(); 
+
+    // 3. Masukkan opsi default/kosong kembali
+    tsSub.addOption({value: "", text: "-- Pilih --"});
+
+    // 4. Masukkan data baru berdasarkan Jenis yang dipilih
+    if (OPTIONS[j]) {
+      OPTIONS[j].forEach(o => {
+        tsSub.addOption({value: o, text: o});
+      });
+    }
+
+    // 5. Segarkan tampilan visual Tom Select
+    tsSub.refreshOptions(false);
+
+    // 6. Jika sedang mode edit (ada parameter val), set nilainya
+    if (val) {
+      setTimeout(() => {
+        tsSub.setValue(val);
+      }, 100);
+    }
+  }
+
+  // Tampilkan/Sembunyikan seksi anggaran
+  if (ang) ang.style.display = (j === "Pengeluaran") ? "block" : "none";
+}
+
+
+  function handleSimpan() {
+  const eid = document.getElementById('edit-id').value;
+  const isEditMode = (eid !== "" && eid !== null); 
+  const btn = document.getElementById('btn-save');
+  
+  const data = {
+    id: eid,
+    tanggal: document.getElementById('tanggal').value,
+    nomorTBP: document.getElementById('nomorTBP').value,
+    jenis: document.getElementById('jenis').value,
+    subJenis: document.getElementById('subJenis').value,
+    kegiatan: document.getElementById('inp-kegiatan').value,
+    subKegiatan: document.getElementById('inp-subkegiatan').value,
+    koderingBelanja: document.getElementById('inp-koderingbelanja').value,
+    uraian: document.getElementById('uraian').value,
+    jumlah: cleanRupiah(document.getElementById('jumlah').value)
+  };
+
+  if (!data.tanggal || !data.jumlah || !data.jenis) {
+    return Swal.fire('Opps', 'Lengkapi kolom Tanggal, Jenis, dan Jumlah!', 'warning');
+  }
+
+  toggleLoader(true);
+  btn.disabled = true;
+
+  const targetFunction = isEditMode ? 'updateData' : 'simpanData';
+
+  google.script.run
+    .withFailureHandler(err => { 
+      // Matikan loading jika server error
+      toggleLoader(false); 
+      btn.disabled = false; 
+      Swal.fire('Gagal!', err.message, 'error'); 
+    })
+    .withSuccessHandler(res => {
+      // PENTING: Bungkus dengan try-catch agar jika UI error, loading tetap bisa mati
+      try {
+        ALL_DATA = res; 
+        FILTERED_DATA = [...res]; 
+
+        // 1. Matikan loading segera setelah data diterima
+        toggleLoader(false);
+        btn.disabled = false;
+
+        // 2. Munculkan notifikasi (Gunakan desain mewah)
+        Swal.fire({
+          title: isEditMode ? 'Berhasil Diperbarui!' : 'Berhasil Disimpan!',
+          text: 'Data transaksi telah tercatat di sistem.',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false,
+          timerProgressBar: true
+        });
+
+        // 3. Jalankan reset (Pastikan fungsi ini tidak ada error)
+        handleBatalEdit(); 
+        updateStats();
+        renderBKU();
+
+      } catch (errUI) {
+        console.error("Kesalahan Render UI:", errUI);
+        toggleLoader(false); // Pastikan loading mati meskipun render gagal
+      }
+    })[targetFunction](data);
+}
+
+  function muatData() {
+    toggleLoader(true);
+    google.script.run.withSuccessHandler(res => {
+      ALL_DATA = res; FILTERED_DATA = [...res];
+      updateStats(); renderBKU(); toggleLoader(false);
+    }).ambilSemuaData();
+  }
+
+  function updateStats() {
+    let t = 0, k = 0;
+    ALL_DATA.forEach(r => { t += r.terima; k += r.keluar; });
+    document.getElementById('stat-terima').innerText = 'Rp ' + t.toLocaleString('id-ID');
+    document.getElementById('stat-keluar').innerText = 'Rp ' + k.toLocaleString('id-ID');
+    document.getElementById('stat-saldo').innerText = 'Rp ' + (t - k).toLocaleString('id-ID');
+  }
+
+  function filterData() {
+  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  const bulanDipilih = document.getElementById('filterBulan').value; // Mengambil angka 1-12 atau ""
+  const clearBtn = document.getElementById('clearBtn');
+
+  // Toggle tombol X pada search
+  keyword ? clearBtn.classList.remove('d-none') : clearBtn.classList.add('d-none');
+
+  if (!ALL_DATA || ALL_DATA.length === 0) return;
+
+  FILTERED_DATA = ALL_DATA.filter(row => {
+    // 1. Logika Filter Bulan
+    // row.tanggal formatnya YYYY-MM-DD, kita ambil bulannya saja
+    const bulanTransaksi = new Date(row.tanggal).getMonth() + 1; 
+    const matchBulan = (bulanDipilih === "" || bulanTransaksi.toString() === bulanDipilih);
+
+    // 2. Logika Filter Keyword (Search)
+    const stringData = (
+      (row.noBku || "") + " " + 
+      (row.uraian || "") + " " + 
+      (row.nomorTbp || "") + " " + 
+      (row.kodeBelanja || "") + " " +
+      (row.jenis || "")
+    ).toLowerCase();
+    const matchKeyword = stringData.includes(keyword);
+
+    // Data tampil jika memenuhi kedua kriteria
+    return matchBulan && matchKeyword;
+  });
+
+  currentPage = 1; // Reset ke halaman 1 setiap kali filter berubah
+  renderBKU();
+}
+
+// Fungsi untuk tombol X (Clear)
+function clearSearch() {
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  filterData(); // Jalankan filter lagi untuk mereset tampilan
+  input.focus();
+}
+
+function changeRowsPerPage(v) { rowsPerPage = parseInt(v); currentPage = 1; renderBKU(); }
+
+  function renderBKU() {
+  const tbody = document.getElementById('tabelBKU');
+  tbody.innerHTML = '';
+  
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedData = FILTERED_DATA.slice(start, end);
+
+  // HITUNG SALDO BERJALAN DARI DATA ASLI
+  let runningSaldo = 0;
+  ALL_DATA.forEach((r) => {
+    runningSaldo += (r.terima - r.keluar);
+    r.currentSaldo = runningSaldo;
+  });
+
+  if (paginatedData.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4 text-secondary">Data tidak ditemukan</td></tr>';
+    return;
+  }
+
+  paginatedData.forEach((row, idx) => {
+    const nomorUrut = start + idx + 1;
+
+    tbody.innerHTML += `
+      <tr>
+        <td class="text-center col-no">${nomorUrut}</td>
+        <td class="fw-bold text-primary no-wrap">${row.noBku}</td>
+        <td class="no-wrap">${row.tanggalTampil}</td>
+        <td class="text-start">
+          <span class="badge bg-light text-dark border fw-normal text-wrap" style="max-width:150px; color:#1e293b !important">
+            ${row.nomorTbp || '-'}
+          </span>
+        </td>
+        <td class="col-uraian">
+          <div class="fw-bold text-wrap text-justify" style="margin-bottom: 4px;">${row.uraian}</div>
+          <div class="text-muted small text-start">${row.jenis} | ${row.subJenis}</div>
+        </td>
+        <td class="text-center no-wrap">
+          <span style="font-size: 13px; font-weight: 500; color: #1e293b;">
+            ${row.kodeBelanja || '-'}
+          </span>
+        </td>
+        <td class="text-end text-success no-wrap">
+          ${row.terima ? 'Rp ' + row.terima.toLocaleString('id-ID') : '-'}
+        </td>
+        <td class="text-end text-danger no-wrap">
+          ${row.keluar ? 'Rp ' + row.keluar.toLocaleString('id-ID') : '-'}
+        </td>
+        <td class="text-end fw-bold no-wrap">
+          Rp ${row.currentSaldo.toLocaleString('id-ID')}
+        </td>
+        <td class="text-center">
+          <div class="action-wrapper">
+            <button class="btn-lux btn-edit-lux" onclick="editRow(${row.id})"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn-lux btn-delete-lux" onclick="confirmDelete(${row.id})"><i class="fa-regular fa-trash-can"></i></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+
+  renderPagination();
+  
+  const totalData = FILTERED_DATA.length;
+  document.getElementById('pageInfo').innerText = 
+    `Menampilkan ${totalData === 0 ? 0 : start + 1} - ${Math.min(end, totalData)} dari ${totalData} data`;
+}
+
+  function renderPagination() {
+  const pageCount = Math.ceil(FILTERED_DATA.length / rowsPerPage);
+  const pag = document.getElementById('pagination');
+  pag.innerHTML = '';
+
+  if (pageCount <= 1) {
+    document.getElementById('pageInfo').classList.add('d-none');
+    return;
+  }
+  document.getElementById('pageInfo').classList.remove('d-none');
+
+  let paginationHtml = `
+    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+      <button class="page-link" onclick="goToPage(${currentPage - 1})">Prev</button>
+    </li>
+  `;
+
+  // Logika pembatasan tombol halaman (agar tidak terlalu panjang jika ada 50 halaman)
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = Math.min(pageCount, startPage + 4);
+  
+  if (endPage - startPage < 4) {
+    startPage = Math.max(1, endPage - 4);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    paginationHtml += `
+      <li class="page-item ${i === currentPage ? 'active' : ''}">
+        <button class="page-link" onclick="goToPage(${i})">${i}</button>
+      </li>
+    `;
+  }
+
+  paginationHtml += `
+    <li class="page-item ${currentPage === pageCount ? 'disabled' : ''}">
+      <button class="page-link" onclick="goToPage(${currentPage + 1})">Next</button>
+    </li>
+  `;
+
+  pag.innerHTML = paginationHtml;
+}
+
+  function goToPage(p) { currentPage = p; renderBKU(); }
+
+  function confirmDelete(id) {
+  Swal.fire({
+    title: 'Hapus Data Transaksi?',
+    text: "Data ini akan dihapus secara permanen",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#dc2626',
+    cancelButtonColor: '#64748b',
+    confirmButtonText: 'Ya, Hapus!',
+    cancelButtonText: 'Batal',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      toggleLoader(true);
+      
+      google.script.run
+        .withFailureHandler(err => {
+          toggleLoader(false);
+          Swal.fire('Gagal!', err.message, 'error');
+        })
+        .withSuccessHandler(res => {
+          // 1. Update data utama dengan data terbaru dari server
+          ALL_DATA = res;
+
+          // 2. RESET FILTER BULAN (Kembali ke "Semua Bulan")
+          if (instances['filterBulan']) {
+            instances['filterBulan'].setValue(""); 
+          }
+
+          // 3. RESET PENCARIAN (Opsional, agar sinkron)
+          const searchInp = document.getElementById('searchInput');
+          if (searchInp) {
+            searchInp.value = "";
+            document.getElementById('clearBtn').classList.add('d-none');
+          }
+
+          // 4. KEMBALIKAN FILTERED_DATA KE DATA PENUH & RESET HALAMAN
+          FILTERED_DATA = [...res]; 
+          currentPage = 1;
+
+          // 5. REFRESH TAMPILAN
+          updateStats();
+          renderBKU();
+          
+          toggleLoader(false);
+          
+          Swal.fire({
+            title: 'Terhapus!',
+            text: 'Data telah dihapus dan Nomor BKU telah diurutkan ulang.',
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false
+          });
+        })
+        .hapusData(id);
+    }
+  });
+}
+
+  function editRow(id) {
+  const row = ALL_DATA.find(r => r.id == id);
+  if (!row) return;
+
+  // 1. PINDAH TAB DULU
+  const inputTabBtn = document.getElementById('input-tab');
+  if (inputTabBtn) new bootstrap.Tab(inputTabBtn).show();
+
+  // 2. KUNCI SISTEM
+  isProgrammaticUpdate = true; 
+  setNavigationDisabled(true);
+
+  // 3. ISI DATA DASAR (Teks & Tanggal)
+  document.getElementById('edit-id').value = row.id;
+  document.getElementById('nomorTBP').value = row.nomorTbp || "";
+  document.getElementById('uraian').value = row.uraian || "";
+  if (fp) fp.setDate(row.tanggal);
+  
+  const jInp = document.getElementById('jumlah');
+  jInp.value = row.nominal.toString();
+  formatInputRupiah(jInp);
+
+  // 4. PROSES DROPDOWN (Jeda 400ms agar Tab Render Selesai)
+  setTimeout(() => {
+    // A. Set Jenis
+    if (instances['jenis']) instances['jenis'].setValue(row.jenis);
+    
+    // B. Set Sub Jenis (Kita suntik manual pilihannya)
+    const tsSubJenis = instances['subJenis'];
+    if (tsSubJenis) {
+      tsSubJenis.clearOptions();
+      if (OPTIONS[row.jenis]) {
+        OPTIONS[row.jenis].forEach(o => tsSubJenis.addOption({value: o, text: o}));
+      }
+      tsSubJenis.setValue(row.subJenis);
+    }
+
+    // C. LOGIKA ANGGARAN (Sangat Krusial)
+    const sectionAnggaran = document.getElementById('section-anggaran');
+    if (row.jenis === "Pengeluaran") {
+      sectionAnggaran.style.display = "block";
+      
+      // Ambil data referensi dari memori (ALL_SETTINGS)
+      // row.kegiatan, row.subKegiatan, row.kodeBelanja diambil dari mapping ambilSemuaData()
+      const kegCode = row.kegiatan;
+      const subCode = row.subKegiatan;
+      const belanjaCode = row.kodeBelanja;
+
+      // --- SUNTIK KEGIATAN ---
+      const tsKeg = instances['inp-kegiatan'];
+      if (tsKeg) {
+        tsKeg.setValue(kegCode);
+      }
+
+      // --- SUNTIK SUB KEGIATAN (Manual Feed) ---
+      const tsSubAng = instances['inp-subkegiatan'];
+      if (tsSubAng) {
+        tsSubAng.clearOptions();
+        ALL_SETTINGS.filter(s => s[0] === "Sub Kegiatan" && s[3] === kegCode).forEach(s => {
+          tsSubAng.addOption({value: s[1], text: s[1] + " - " + s[2]});
+        });
+        tsSubAng.setValue(subCode);
+      }
+
+      // --- SUNTIK KODERING BELANJA (Manual Feed) ---
+      const tsKod = instances['inp-koderingbelanja'];
+      if (tsKod) {
+        tsKod.clearOptions();
+        ALL_SETTINGS.filter(s => s[0] === "Kodering Belanja" && s[3] === subCode).forEach(s => {
+          tsKod.addOption({value: s[1], text: s[1] + " - " + s[2]});
+        });
+        tsKod.setValue(belanjaCode);
+      }
+      
+    } else {
+      sectionAnggaran.style.display = "none";
+    }
+
+    // 5. UPDATE UI TOMBOL
+    document.getElementById('btn-cancel').classList.remove('d-none');
+    const b = document.getElementById('btn-save');
+    b.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i>Update Transaksi';
+    b.className = "btn btn-warning w-100 fw-bold";
+    
+    // 6. LEPASKAN KUNCI SISTEM
+    setTimeout(() => { isProgrammaticUpdate = false; }, 300);
+  }, 400);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+  // LOGIKA SETTINGS
+  function loadSettingsUI() {
+  toggleLoader(true);
+  google.script.run
+    .withFailureHandler(err => { toggleLoader(false); alert(err.message); })
+    .withSuccessHandler(res => { 
+      ALL_SETTINGS = res; 
+      renderSettingsTable(); 
+      populateInputDropdowns(); // Update dropdown di Tab Input juga
+      toggleLoader(false); 
+    })
+    .getSettings();
+}
+
+  function renderSettingsTable() {
+  const tbody = document.getElementById('set-list');
+  tbody.innerHTML = '';
+  
+  if (!ALL_SETTINGS || ALL_SETTINGS.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3">Belum ada referensi</td></tr>';
+    return;
+  }
+
+  // Filter data belanja saja untuk dasar penghitungan kumulasi pagu ke atas
+  let dataBelanja = ALL_SETTINGS.filter(s => s[0] === "Kodering Belanja");
+  
+  ALL_SETTINGS.forEach((s, index) => {
+    let displayPagu = 0;
+    let rowIdx = index + 1;
+    let hasChildren = false;
+
+    // 1. LOGIKA HITUNG PAGU & CEK DATA TURUNAN (CHILDREN)
+    if (s[0] === "Kodering Belanja") {
+      displayPagu = parseFloat(s[4]) || 0;
+      hasChildren = false;
+    } else if (s[0] === "Sub Kegiatan") {
+      // Cek apakah ada belanja di bawah sub kegiatan ini
+      hasChildren = ALL_SETTINGS.some(item => item[0] === "Kodering Belanja" && item[3] === s[1]);
+      // Kumulasi pagu dari belanja yang menginduk ke sub ini
+      displayPagu = dataBelanja.filter(b => b[3] === s[1]).reduce((sum, curr) => sum + (parseFloat(curr[4]) || 0), 0);
+    } else if (s[0] === "Kegiatan") {
+      // Cek apakah ada sub kegiatan di bawah kegiatan ini
+      hasChildren = ALL_SETTINGS.some(item => item[0] === "Sub Kegiatan" && item[3] === s[1]);
+      // Kumulasi pagu dari semua belanja yang ada di bawah sub kegiatan milik kegiatan ini
+      let subKegiatans = ALL_SETTINGS.filter(sub => sub[0] === "Sub Kegiatan" && sub[3] === s[1]);
+      subKegiatans.forEach(sub => {
+        displayPagu += dataBelanja.filter(b => b[3] === sub[1]).reduce((sum, curr) => sum + (parseFloat(curr[4]) || 0), 0);
+      });
+    }
+
+    // 2. LOGIKA STYLING (BADGE, BOLD, & WARNA)
+    const isMain = (s[0] === "Kegiatan" || s[0] === "Sub Kegiatan");
+    
+    // Warna Badge
+    let badgeClass = (s[0] === "Kegiatan") ? "bg-dark text-white" : 
+                     (s[0] === "Sub Kegiatan") ? "bg-secondary text-white" : 
+                     "bg-light text-dark border";
+
+    // Ketebalan Teks Kode & Nama
+    const weightClass = isMain ? "fw-bold" : "fw-normal";
+    const opacityClass = isMain ? "" : "text-secondary";
+
+    // KETEBALAN TEKS NILAI PAGU (Update: Bold hanya untuk Kegiatan & Sub)
+    const paguWeightClass = isMain ? "fw-bold" : "fw-normal";
+
+    // 3. LOGIKA PROTEKSI TOMBOL (DISABLE JIKA PUNYA TURUNAN)
+    const disabledAttr = hasChildren ? 'disabled' : '';
+    const disabledClass = hasChildren ? 'btn-disabled-lux' : '';
+
+    // 4. RENDER KE HTML
+    tbody.innerHTML += `
+      <tr class="align-top">
+        <td>
+          <span class="badge ${badgeClass}" style="font-size: 10px; padding: 5px 10px; min-width: 90px;">
+            ${s[0]}
+          </span>
+        </td>
+        <td class="no-wrap ${weightClass}" style="color: #db2777; font-size: 11px;">
+          ${s[1]}
+        </td>
+        <td class="${weightClass} ${opacityClass}">
+          ${s[2]}
+        </td>
+        <td class="text-end ${paguWeightClass} text-primary no-wrap">
+          Rp ${displayPagu.toLocaleString('id-ID')}
+        </td>
+        <td class="text-center">
+          <div class="action-wrapper">
+            <button class="btn-lux btn-edit-lux ${disabledClass}" onclick="editSetting(${rowIdx})" ${disabledAttr} title="${hasChildren ? 'Memiliki turunan data' : 'Edit'}">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button class="btn-lux btn-delete-lux ${disabledClass}" onclick="deleteSetting(${rowIdx})" ${disabledAttr} title="${hasChildren ? 'Memiliki turunan data' : 'Hapus'}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+  function toggleParentSetting() {
+  const tipe = document.getElementById('set-tipe').value;
+  const pCont = document.getElementById('parent-container');
+  const paguCont = document.getElementById('pagu-container');
+  const sel = document.getElementById('set-parent');
+  
+  // 1. Logika Tampilan Pagu
+  paguCont.style.display = (tipe === "Kodering Belanja") ? "block" : "none";
+
+  // 2. Hancurkan instance Tom Select pada set-parent jika sudah ada sebelumnya
+  if (instances['set-parent']) {
+    instances['set-parent'].destroy();
+    delete instances['set-parent'];
+  }
+
+  if(tipe === "Kegiatan") {
+    pCont.style.display = "none";
+  } else {
+    pCont.style.display = "block";
+    
+    // Tentukan tipe induk dan ikon yang sesuai
+    const isSub = (tipe === "Sub Kegiatan");
+    const parentTipe = isSub ? "Kegiatan" : "Sub Kegiatan";
+    const icon = isSub ? "fa-solid fa-folder" : "fa-solid fa-sitemap"; // Folder untuk Kegiatan, Sitemap untuk Sub
+    
+    // 3. Isi Data ke Select Asli
+    sel.innerHTML = '<option value="">-- Pilih --</option>';
+    ALL_SETTINGS.filter(i => i[0] === parentTipe).forEach(i => {
+      sel.innerHTML += `<option value="${i[1]}">${i[1]} - ${i[2]}</option>`;
+    });
+
+    // 4. Inisialisasi ulang tampilan mewah (Lux Select)
+    initLuxSelect('set-parent', icon);
+  }
+}
+
+  function editSetting(rowIdx) {
+  const data = ALL_SETTINGS[rowIdx - 1];
+  
+  document.getElementById('set-id').value = rowIdx;
+  
+  // Set tipe dan pemicu toggle (ini akan menjalankan initLuxSelect otomatis)
+  document.getElementById('set-tipe').value = data[0];
+  if (instances['set-tipe']) instances['set-tipe'].setValue(data[0]);
+  
+  toggleParentSetting(); 
+  
+  setTimeout(() => {
+    // Set nilai Induk/Parent pada Tom Select
+    if(data[3] && instances['set-parent']) {
+      instances['set-parent'].setValue(data[3]);
+    }
+    
+    document.getElementById('set-kodering').value = data[1];
+    document.getElementById('set-nama').value = data[2];
+    
+    const paguInp = document.getElementById('set-pagu');
+    if(paguInp) {
+      paguInp.value = data[4] || 0;
+      formatInputRupiah(paguInp);
+    }
+
+    // Ubah tombol ke mode update
+    const btnSave = document.getElementById('btn-save-setting');
+    btnSave.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i>Update Data';
+    btnSave.classList.replace('btn-success', 'btn-warning');
+    document.getElementById('btn-cancel-setting').classList.remove('d-none');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 300); // Berikan jeda sedikit lebih lama agar Tom Select siap
+}
+
+function handleBatalSetting() {
+  resetApplicationState();
+  // 1. Bersihkan ID Hidden
+  document.getElementById('set-id').value = "";
+
+  // 2. Reset Input Teks
+  document.getElementById('set-kodering').value = "";
+  document.getElementById('set-nama').value = "";
+  if (document.getElementById('set-pagu')) document.getElementById('set-pagu').value = "";
+
+  // 3. Reset Tom Select 'Tipe Referensi' ke "Kegiatan"
+  if (instances['set-tipe']) {
+    instances['set-tipe'].setValue('Kegiatan');
+  }
+
+  // 4. Bersihkan & Hancurkan Tom Select 'Parent'
+  if (instances['set-parent']) {
+    instances['set-parent'].clear();
+    instances['set-parent'].destroy();
+    delete instances['set-parent'];
+  }
+  
+  // 5. Kembalikan UI ke kondisi awal (Sembunyikan Parent & Pagu)
+  document.getElementById('parent-container').style.display = "none";
+  document.getElementById('pagu-container').style.display = "none";
+
+  // 6. Kembalikan warna tombol ke Hijau (Tambah Data)
+  const btnSave = document.getElementById('btn-save-setting');
+  if (btnSave) {
+    btnSave.innerHTML = '<i class="fa-solid fa-plus-circle me-2"></i>Tambah Data';
+    btnSave.classList.remove('btn-warning');
+    btnSave.classList.add('btn-success');
+  }
+  
+  const btnCancel = document.getElementById('btn-cancel-setting');
+  if (btnCancel) btnCancel.classList.add('d-none');
+}
+
+function deleteSetting(rowIdx) {
+  // 1. Ambil data dari array ALL_SETTINGS berdasarkan index baris
+  const data = ALL_SETTINGS[rowIdx - 1];
+  const tipe = data[0]; // Kegiatan / Sub Kegiatan / Kodering Belanja
+  const nama = data[2]; // Nama uraiannya
+
+  // 2. Tentukan variabel kalimat berdasarkan tipe
+  let judul, teks, iconWarna;
+
+  if (tipe === "Kegiatan") {
+    judul = "Hapus Kegiatan Utama?";
+    teks = `Anda akan menghapus Kegiatan: <b>${nama}</b>. Tindakan ini bersifat permanen!`;
+    iconWarna = "#d33"; // Merah pekat
+  } 
+  else if (tipe === "Sub Kegiatan") {
+    judul = "Hapus Sub Kegiatan?";
+    teks = `Apakah anda yakin ingin menghapus Sub Kegiatan <b>${nama}</b>?`;
+    iconWarna = "#f39c12"; // Oranye
+  } 
+  else {
+    judul = "Hapus Kodering Belanja?";
+    teks = `Data <b>${nama}</b> akan dihapus secara permanen dari daftar referensi.`;
+    iconWarna = "#e74c3c"; // Merah standar
+  }
+
+  // 3. Tampilkan SweetAlert dengan kalimat yang sudah dibedakan
+  Swal.fire({
+    title: judul,
+    html: teks, // Menggunakan 'html' agar bisa pakai tag <b>
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: iconWarna,
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Ya, Hapus!',
+    cancelButtonText: 'Batal',
+    reverseButtons: true // Memposisikan tombol 'Batal' di kiri agar lebih ergonomis
+  }).then((result) => {
+    if (result.isConfirmed) {
+      toggleLoader(true);
+      google.script.run
+        .withFailureHandler(err => {
+          toggleLoader(false);
+          Swal.fire('Gagal!', err.message, 'error');
+        })
+        .withSuccessHandler(res => {
+          ALL_SETTINGS = res;
+          renderSettingsTable();
+          populateInputDropdowns();
+          toggleLoader(false);
+          Swal.fire({
+            title: 'Terhapus!',
+            text: `${tipe} telah berhasil dihapus.`,
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false
+          });
+        })
+        .hapusSetting(rowIdx);
+    }
+  });
+}
+
+function handleSaveSetting() {
+  // 1. Ambil ID untuk menentukan apakah ini Update atau Simpan Baru
+  const editId = document.getElementById('set-id').value;
+
+  // 2. Kumpulkan data dari form
+  const d = { 
+    id: editId,
+    kategori: document.getElementById('set-tipe').value, 
+    kodering: document.getElementById('set-kodering').value, 
+    nama: document.getElementById('set-nama').value, 
+    parent: document.getElementById('set-parent').value,
+    pagu: cleanRupiah(document.getElementById('set-pagu').value)
+  };
+
+  // 3. Validasi input wajib
+  if(!d.kodering || !d.nama) {
+    return Swal.fire({
+      icon: 'error',
+      title: 'Data Tidak Lengkap',
+      text: 'Nomor Kodering dan Nama/Uraian wajib diisi!',
+      confirmButtonColor: '#2563eb'
+    });
+  }
+
+  toggleLoader(true);
+
+  // 4. Kirim ke Server
+  google.script.run
+    .withFailureHandler(err => {
+      toggleLoader(false);
+      Swal.fire('Gagal Simpan', err.message, 'error');
+    })
+    .withSuccessHandler(res => {
+      // Update variabel data lokal
+      ALL_SETTINGS = res;
+      
+      // Refresh tampilan tabel dan dropdown di Tab Input
+      renderSettingsTable();
+      populateInputDropdowns();
+      
+      // 5. RESET FORM & KEMBALIKAN TOMBOL KE MODE TAMBAH
+      // Kita panggil handleBatalSetting() agar kode tidak berulang (reusable code)
+      handleBatalSetting(); 
+      
+      toggleLoader(false);
+
+      // 6. Notifikasi Sukses yang Dinamis
+      Swal.fire({
+        icon: 'success',
+        title: editId ? 'Berhasil Diperbarui' : 'Berhasil Ditambahkan',
+        text: editId ? 'Data referensi telah diubah.' : 'Referensi baru telah ditambahkan.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    })
+    .addSetting(d);
+}
+
+  function populateInputDropdowns() {
+  const tsKeg = instances['inp-kegiatan'];
+  if (!tsKeg) return;
+
+  tsKeg.clearOptions();
+  tsKeg.addOption({value: "", text: "-- Pilih Kegiatan --"});
+
+  // Ambil data Kegiatan dari ALL_SETTINGS
+  const daftarKegiatan = ALL_SETTINGS.filter(s => s[0] === "Kegiatan");
+  
+  daftarKegiatan.forEach(s => {
+    tsKeg.addOption({
+      value: s[1], 
+      text: s[1] + " - " + s[2]
+    });
+  });
+  
+  tsKeg.refreshOptions(false);
+}
+
+function populateFilterBulan() {
+  const ts = instances['filterBulan'];
+  if (!ts) return;
+
+  ts.clearOptions();
+  ts.addOption({value: "", text: "Semua Bulan"});
+  
+  const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  
+  namaBulan.forEach((nama, i) => {
+    ts.addOption({value: (i + 1).toString(), text: nama});
+  });
+  
+  ts.setValue("", true);
+}
+
+  function filterSubKegiatan() {
+  const p = document.getElementById('inp-kegiatan').value;
+  const ts = instances['inp-subkegiatan'];
+  if (!ts) return;
+
+  ts.clear();
+  ts.clearOptions();
+  ts.addOption({value: "", text: "-- Pilih Sub Kegiatan --"});
+
+  ALL_SETTINGS.filter(i => i[0] === "Sub Kegiatan" && i[3] === p).forEach(i => {
+    ts.addOption({value: i[1], text: i[1] + " - " + i[2]});
+  });
+}
+
+
+ function filterKoderingBelanja() {
+  const p = document.getElementById('inp-subkegiatan').value;
+  const ts = instances['inp-koderingbelanja'];
+  if (!ts) return;
+
+  ts.clear();
+  ts.clearOptions();
+  ts.addOption({value: "", text: "-- Pilih Kodering --"});
+
+  ALL_SETTINGS.filter(i => i[0] === "Kodering Belanja" && i[3] === p).forEach(i => {
+    ts.addOption({value: i[1], text: i[1] + " - " + i[2]});
+  });
+}
+
+  // Fungsi untuk memformat angka saat diketik
+function formatInputRupiah(i) {
+    let v = i.value.replace(/[^,\d]/g, ""), s = v.split(","), si = s[0].length % 3, r = s[0].substr(0, si), ri = s[0].substr(si).match(/\d{3}/gi);
+    if (ri) r += (si ? "." : "") + ri.join(".");
+    i.value = s[1] != undefined ? r + "," + s[1] : r;
+  }
+
+// Fungsi pembantu untuk mengubah kembali string Rupiah ke angka murni
+function cleanRupiah(v) { return parseFloat(v.replace(/\./g, "")) || 0; }
+
+function handleBatalEdit() {
+  // 1. Matikan Flag Update (Agar pemicu otomatis dropdown normal kembali)
+  isProgrammaticUpdate = false; 
+
+  // 2. Aktifkan kembali Navigasi Tab (Jika sebelumnya terkunci)
+  setNavigationDisabled(false);
+
+  // 3. Panggil Fungsi Reset Global (Untuk membersihkan semua dropdown & field)
+  resetApplicationState();
+
+  // 4. Pastikan UI Tombol kembali ke warna Biru (Mode Simpan)
+  const btnSave = document.getElementById('btn-save');
+  if (btnSave) {
+    btnSave.innerHTML = '<i class="fa-solid fa-save me-2"></i>Simpan Transaksi';
+    btnSave.className = "btn btn-primary w-100 fw-bold"; // Warna biru
+    btnSave.style.boxShadow = ""; 
+  }
+
+  // 5. Sembunyikan Tombol Batal
+  const btnCancel = document.getElementById('btn-cancel');
+  if (btnCancel) {
+    btnCancel.classList.add('d-none');
+  }
+
+  // 6. Pindah Kembali ke Tab BKU secara otomatis
+  const bkuTabBtn = document.getElementById('bku-tab');
+  if (bkuTabBtn) {
+    const tabInstance = new bootstrap.Tab(bkuTabBtn);
+    tabInstance.show();
+  }
+}
+
+// TAMBAHKAN INI DI DALAM <SCRIPT> (Bisa di bagian paling bawah)
+function setNavigationDisabled(disabled) {
+  const bkuTab = document.getElementById('bku-tab');
+  const setTab = document.getElementById('set-tab');
+
+  if (!bkuTab || !setTab) {
+    console.error("ID bku-tab atau set-tab tidak ditemukan di HTML!");
+    return;
+  }
+
+  if (disabled) {
+    // 1. Tambahkan class visual & blokir klik via CSS
+    bkuTab.classList.add('disabled-tab');
+    setTab.classList.add('disabled-tab');
+    
+    // 2. Jika menggunakan tag <button>, gunakan atribut disabled
+    bkuTab.disabled = true;
+    setTab.disabled = true;
+
+    // 3. Cabut pemicu tab Bootstrap (agar tidak bisa pindah tab lewat keyboard/js)
+    bkuTab.setAttribute('data-bs-toggle', 'disabled');
+    setTab.setAttribute('data-bs-toggle', 'disabled');
+  } else {
+    // 1. Kembalikan visual
+    bkuTab.classList.remove('disabled-tab');
+    setTab.classList.remove('disabled-tab');
+    
+    // 2. Aktifkan kembali button
+    bkuTab.disabled = false;
+    setTab.disabled = false;
+
+    // 3. Pasang kembali pemicu tab Bootstrap
+    bkuTab.setAttribute('data-bs-toggle', 'tab');
+    setTab.setAttribute('data-bs-toggle', 'tab');
+  }
+}
+
+function initLuxSelect(id, icon) {
+  if (instances[id]) instances[id].destroy();
+  
+  instances[id] = new TomSelect(`#${id}`, {
+    create: false,
+    // SANGAT PENTING: Set ke null agar tidak diurutkan otomatis oleh library
+    sortField: null, 
+    placeholder: "-- Pilih --",
+    allowEmptyOption: true,
+    render: {
+      option: function(data, escape) {
+        if (data.text.indexOf('-- Pilih --') !== -1 || data.text === "Semua Bulan") {
+          return `<div class="py-1 text-secondary">${escape(data.text)}</div>`;
+        }
+        return `<div class="d-flex align-items-center">
+                  <i class="${icon} select-icon me-2"></i>
+                  <span>${escape(data.text)}</span>
+                </div>`;
+      },
+      item: function(data, escape) {
+        if (data.text.indexOf('-- Pilih --') !== -1 || data.text === "Semua Bulan") {
+          return `<div class="text-secondary">${escape(data.text)}</div>`;
+        }
+        return `<div><i class="${icon} select-icon me-2"></i>${escape(data.text)}</div>`;
+      }
+    }
+  });
+
+  // Listener tetap sama
+  instances[id].on('change', () => {
+    if (!isProgrammaticUpdate) {
+      if (id === 'jenis') updateSubJenis();
+      if (id === 'inp-kegiatan') filterSubKegiatan();
+      if (id === 'inp-subkegiatan') filterKoderingBelanja();
+      if (id === 'filterBulan') filterData();
+      if (id === 'set-tipe') toggleParentSetting();
+    }
+  });
+}
+
+function resetApplicationState() {
+  // 1. PENGAMAN EDIT
+  // Jika sedang proses edit, jangan jalankan reset agar data di form tidak hilang
+  if (isProgrammaticUpdate) return; 
+
+  isProgrammaticUpdate = true; 
+  setNavigationDisabled(false);
+
+  // 2. RESET FORM TRANSAKSI (TAB INPUT)
+  const formTransaksi = document.getElementById('formTransaksi');
+  if (formTransaksi) formTransaksi.reset();
+  
+  document.getElementById('edit-id').value = "";
+  if (fp) fp.clear(); // Bersihkan Kalender Utama
+  
+  const btnSave = document.getElementById('btn-save');
+  if (btnSave) {
+    btnSave.innerHTML = '<i class="fa-solid fa-save me-2"></i>Simpan Transaksi';
+    btnSave.className = "btn btn-primary w-100 fw-bold";
+    btnSave.disabled = false;
+  }
+  
+  if (document.getElementById('btn-cancel')) document.getElementById('btn-cancel').classList.add('d-none');
+  if (document.getElementById('section-anggaran')) document.getElementById('section-anggaran').style.display = "none";
+
+  // 3. RESET TAB PENGATURAN (REFERENSI)
+  document.getElementById('set-id').value = "";
+  document.getElementById('set-kodering').value = "";
+  document.getElementById('set-nama').value = "";
+  if (document.getElementById('set-pagu')) document.getElementById('set-pagu').value = "";
+  if (document.getElementById('parent-container')) document.getElementById('parent-container').style.display = "none";
+  if (document.getElementById('pagu-container')) document.getElementById('pagu-container').style.display = "none";
+
+  const btnSetSave = document.getElementById('btn-save-setting');
+  if (btnSetSave) {
+    btnSetSave.innerHTML = '<i class="fa-solid fa-plus-circle me-2"></i>Tambah Data';
+    btnSetSave.className = "btn btn-success w-100 fw-bold";
+  }
+  if (document.getElementById('btn-cancel-setting')) document.getElementById('btn-cancel-setting').classList.add('d-none');
+
+  // 4. RESET TAB LAPORAN
+  if (fpReport) fpReport.setDate(new Date()); // Kembalikan tanggal cetak ke hari ini
+
+  // 5. BERSIHKAN SEMUA TOM SELECT (Visual & Opsi)
+  Object.keys(instances).forEach(id => {
+    const ts = instances[id];
+    if (ts) {
+      ts.clear(true); 
+      ts.clearOptions();
+    }
+  });
+
+  // 6. ISI ULANG DATA STATIS (WAJIB AGAR DROPDOWN TIDAK KOSONG)
+  
+  // A. Isi ulang Periode Bulan (Tab Laporan) & Filter Bulan (Tab BKU)
+  // Kita panggil fungsi populate yang sudah dibuat sebelumnya
+  if (typeof populateReportMonths === "function") populateReportMonths(); 
+  if (typeof populateFilterBulan === "function") populateFilterBulan(); 
+
+  // B. Isi ulang Jenis Transaksi (Tab Input)
+  if (instances['jenis']) {
+    ['Pelimpahan', 'Pengeluaran', 'Pengembalian', 'Pajak'].forEach(o => {
+      instances['jenis'].addOption({value: o, text: o});
+    });
+  }
+
+  // C. Isi ulang Tipe Referensi (Tab Pengaturan)
+  if (instances['set-tipe']) {
+    const opsiTipe = [
+      {value: "Kegiatan", text: "Kegiatan"},
+      {value: "Sub Kegiatan", text: "Sub Kegiatan"},
+      {value: "Kodering Belanja", text: "Kodering Belanja"}
+    ];
+    opsiTipe.forEach(o => instances['set-tipe'].addOption(o));
+    instances['set-tipe'].setValue("Kegiatan", true);
+  }
+
+  // D. Isi ulang Daftar Kegiatan dari ALL_SETTINGS
+  if (typeof populateInputDropdowns === "function") populateInputDropdowns();
+
+  // 7. RESET PENCARIAN TABEL BKU
+  const searchInp = document.getElementById('searchInput');
+  if (searchInp) {
+    searchInp.value = "";
+    const clearBtn = document.getElementById('clearBtn');
+    if (clearBtn) clearBtn.classList.add('d-none');
+  }
+
+  // B. Reset Dropdown Filter Bulan (Tom Select) ke "Semua Bulan"
+  if (instances['filterBulan']) {
+    instances['filterBulan'].setValue("", true); // "" = Semua Bulan, true = silent (tidak trigger event)
+  }
+
+  // C. Reset Baris Per Halaman ke Default (5 Baris)
+  const rowsSelect = document.getElementById('rowsPerPageSelect');
+  if (rowsSelect) {
+    rowsSelect.value = "5";
+    rowsPerPage = 5; // Pastikan variabel global rowsPerPage juga diupdate
+  }
+
+  // D. Kembalikan Data ke Kondisi Penuh & Halaman 1
+  FILTERED_DATA = [...ALL_DATA]; 
+  currentPage = 1;
+
+  // E. Render Ulang Tabel agar bersih
+  renderBKU();
+
+  // 8. SELESAI
+  setTimeout(() => { 
+    isProgrammaticUpdate = false; 
+  }, 300);
+}
+
+function downloadPDF() {
+  const bulan = document.getElementById('reportBulan').value;
+  const tglCetak = document.getElementById('reportTanggalCetak').value; // Ambil tanggal manual
+  
+  if(!tglCetak) return Swal.fire('Perhatian', 'Harap pilih tanggal cetak laporan!', 'warning');
+
+  Swal.fire({
+    title: 'Menyiapkan PDF...',
+    allowOutsideClick: false,
+    didOpen: () => { Swal.showLoading(); }
+  });
+
+  google.script.run
+    .withFailureHandler(err => { Swal.close(); alert(err.message); })
+    .withSuccessHandler(dataUri => {
+      Swal.close();
+      const link = document.createElement('a');
+      link.href = dataUri;
+      link.download = `Laporan_BKU.pdf`;
+      link.click();
+    })
+    .generatePDF(bulan, tglCetak); // Kirim 2 parameter
+}
+
+
+function populateReportMonths() {
+  const ts = instances['reportBulan'];
+  if (!ts) return;
+
+  // Bersihkan sisa-sisa data lama
+  ts.clearOptions();
+
+  // Tambahkan opsi "Semua Bulan" di paling atas
+  ts.addOption({value: "", text: "Semua Bulan"});
+  
+  const namaBulan = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+
+  // Tambahkan bulan 1-12
+  namaBulan.forEach((nama, i) => {
+    ts.addOption({
+      value: (i + 1).toString(), 
+      text: nama
+    });
+  });
+
+  // Set agar tampilannya mengikuti urutan input (bukan abjad)
+  ts.settings.sortField = null;
+  ts.refreshOptions(false);
+  ts.setValue("", true); // Set default ke "Semua Bulan" secara diam-diam
+}
+
+</script>
+</body>
+</html>
